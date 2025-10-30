@@ -1,0 +1,13 @@
+name: Scheduled Maintenance
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # every day at midnight
+
+jobs:
+  maintenance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Maintenance Script
+        run: bash scripts/cleanup.sh

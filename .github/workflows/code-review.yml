@@ -1,0 +1,13 @@
+name: Code Review Checks
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
