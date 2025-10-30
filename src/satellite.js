@@ -143,6 +143,7 @@ function getTable(config) {
 						return ele;
 					});
 				}
+				//remove index
 				database = database.map((ele) => {
 					if (isNaN(ele[property[6]][1])) {
 						ele[property[8]] = 0;
