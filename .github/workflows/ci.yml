@@ -1,5 +1,6 @@
 name: Continuous Integration
 
+# Trigger on push or pull request to main
 on:
   push:
     branches:
@@ -17,15 +18,18 @@ jobs:
         node-version: [18.x]
 
     steps:
-      - name: Checkout code
+      # Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      # Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Cache npm modules
+      # Cache node modules for faster builds
+      - name: Cache npm
         uses: actions/cache@v3
         with:
           path: ~/.npm
@@ -33,11 +37,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      # Install dependencies
       - name: Install dependencies
         run: npm install
 
-      - name: Run lint
+      # Run lint
+      - name: Run ESLint
         run: npm run lint
 
+      # Run tests
       - name: Run tests
         run: npm test

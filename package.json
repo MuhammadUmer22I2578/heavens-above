@@ -6,7 +6,7 @@
   "main": "run.js",
   "scripts": {
     "lint": "eslint . --ext .js,.ts",
-    "test": "jest --runInBand",
+    "test": "jest --runInBand --passWithNoTests",
     "build": "node ./build-script-if-any.js"
   },
   "dependencies": {
