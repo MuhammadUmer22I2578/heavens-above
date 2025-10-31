@@ -1,22 +1,49 @@
-name: Deploy Docs
+name: Documentation Deployment
 
 on:
   push:
     branches: [ main ]
     paths:
-      - 'docs/**'
+      - 'docs/**'   # Only run when something in docs folder changes
+
+  workflow_dispatch:  # Allow manual trigger
 
 jobs:
-  deploy-docs:
+  build-and-deploy:
+    name: Build and Deploy Docs
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write   # Needed to push to gh-pages branch
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Build Docs
+      # Step 1: Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Setup Node.js (if using a static site generator like MkDocs or Docusaurus)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # Step 3: Install docs builder (optional, for static site generators)
+      # For example, if you used Docsify or Docusaurus, install dependencies here
+      - name: Install dependencies
         run: |
-          npm install
-          npm run docs:build
+          npm install -g docsify-cli
+
+      # Step 4: Build documentation
+      - name: Build documentation
+        run: |
+          mkdir -p build
+          cp -r docs/* build/
+          echo "<meta http-equiv='refresh' content='0; url=./index.html'>" > build/index.html
+          echo "✅ Documentation build completed."
+
+      # Step 5: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/dist
+          publish_dir: ./build
