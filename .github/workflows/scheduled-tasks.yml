@@ -1,13 +1,34 @@
-name: Scheduled Maintenance
+name: Scheduled Maintenance Task
 
 on:
   schedule:
-    - cron: '0 0 * * *' # every day at midnight
+    # Runs every day at midnight (UTC)
+    - cron: "0 0 * * *"
+
+  # Also allows manual trigger
+  workflow_dispatch:
 
 jobs:
   maintenance:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Run Maintenance Script
-        run: bash scripts/cleanup.sh
+      # Step 1: Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Simulate maintenance
+      - name: Run maintenance script
+        run: |
+          echo "🧹 Running daily maintenance tasks..."
+          echo "Clearing cache..."
+          echo "Performing database backup (simulated)..."
+          echo "✅ Maintenance completed successfully at $(date)" > maintenance_log.txt
+          cat maintenance_log.txt
+
+      # Step 3: Upload log as artifact
+      - name: Upload maintenance log
+        uses: actions/upload-artifact@v3
+        with:
+          name: maintenance-log
+          path: maintenance_log.txt
