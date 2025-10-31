@@ -19,7 +19,7 @@ jobs:
     steps:
       # Step 1: Checkout repo
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # Step 2: Setup Node.js (if using a static site generator like MkDocs or Docusaurus)
       - name: Setup Node.js
