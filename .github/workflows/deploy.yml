@@ -1,21 +1,44 @@
-name: Deploy to Heroku
+name: Deployment Pipeline (Simulated)
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  deploy:
+  build-test-deploy:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
     steps:
-      - uses: actions/checkout@v4
+      # Step 1: Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Build App
-        run: npm run build
-
-      - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@v4.1.7
+      # Step 2: Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "your-heroku-app"
-          heroku_email: "your-email@example.com"
+          node-version: ${{ matrix.node-version }}
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Run lint
+      - name: Run ESLint
+        run: npm run lint
+
+      # Step 5: Run tests
+      - name: Run Jest tests
+        run: npm test
+
+      # Step 6: Simulate deployment
+      - name: Build project
+        run: echo "Building project for deployment..."
+
+      - name: Simulate Deployment
+        run: echo "✅ Deployment simulated successfully!"
