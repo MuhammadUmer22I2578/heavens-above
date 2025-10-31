@@ -28,7 +28,7 @@ jobs:
 
       # Step 3: Upload log as artifact
       - name: Upload maintenance log
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v5
         with:
           name: maintenance-log
           path: maintenance_log.txt
